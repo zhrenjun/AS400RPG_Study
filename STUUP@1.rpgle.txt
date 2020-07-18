@@ -1,0 +1,131 @@
+ FMT *   *. 1 ...+... 2 ...+... 3 ...+... 4 ...+... 5 ...+... 6 ...+... 7 ...+... 8 
+        *************** Beginning of data ******************************************
+0001.00 F*TUTABLE  IF A E             DISK                                          
+0002.00 FSTUTABLELFUF A E           K DISK                                          
+0003.00 FSTUUP@2   CF   E             WORKSTN                                       
+0004.00 C                   DOW       1 = 1                                         
+0005.00 C                   EXFMT     BODY                                          
+0006.00 C   KC              LEAVE                                                   
+0007.00 C                   EXSR      STUCK                                         
+0008.00 C*                  IF        MSG3 = 'U' AND MSG2 = *BLANKS                 
+0009.00 C                   IF        MSG3 = 'U'                                    
+0010.00 C                   EXSR      STUUP                                         
+0011.00 C*                  ELSEIF    MSG3 = 'D' AND MSG2 = *BLANKS                 
+0012.00 C                   ELSEIF    MSG3 = 'D'                                    
+0013.00 C                   EXSR      STUDEL                                        
+0014.00 C*                  ELSEIF    MSG3 = 'I' AND MSG2 = *BLANKS                 
+0015.00 C                   ELSEIF    MSG3 = 'I'                                    
+0016.00 C                   EXSR      STUADD                                        
+0017.00 C                   ENDIF                                                   
+0018.00 C                   ENDDO                                                   
+0019.00 C                   SETON                                          LR       
+0020.00 C                   RETURN                                             
+0021.00 C*****************************************************                 
+0022.00 C     STUCK         BEGSR                                              
+0023.00 C*                  IF        MSG2 = 'S' AND MSG3 = *BLANKS            
+0024.00 C                   IF        MSG3 = 'S'                               
+0025.00 C     STUKEY        KLIST                                              
+0026.00 C                   KFLD                    ID                         
+0027.00 C                   EVAL      ID = STUID1                              
+0028.00 C     STUKEY        CHAIN     STU                                91    
+0029.00 C                   IF        %found()                                 
+0030.00 C                   EVAL      STUID = STUID1                           
+0031.00 C                   EVAL      STUNAME = NAME                           
+0032.00 C                   EVAL      STUAGE = AGES                            
+0033.00 C                   EVAL      STUSEX = SEX                             
+0034.00 C                   EVAL      STUNATION = NATION                       
+0035.00 C                   EVAL      MSG1= '恭喜你查詢到此人信息了'         
+0036.00 C*                  EVAL      MSG2 = *BLANKS                           
+0037.00 C                   EVAL      STUID1 = *BLANKS                         
+0038.00 C                   EVAL      MSG3 = *BLANKS                           
+0039.00 C                   ELSE                                               
+0040.00 C                   EVAL      MSG1= '未查詢到相關學生信息'               
+0041.00 C                   EVAL      STUID = *BLANKS                              
+0042.00 C                   EVAL      STUNAME = *BLANKS                            
+0043.00 C                   EVAL      STUAGE = *ZERO                               
+0044.00 C                   EVAL      STUSEX = *BLANKS                             
+0045.00 C                   EVAL      STUNATION = *BLANKS                          
+0046.00 C*                  EVAL      MSG2 = *BLANKS                               
+0047.00 C                   EVAL      MSG3 = *BLANKS                               
+0048.00 C                   ENDIF                                                  
+0049.00 C                   ENDIF                                                  
+0050.00 C     STUSO1        ENDSR                                                  
+0051.00 C************************************************************              
+0052.00 C     STUUP         BEGSR                                                  
+0053.00 C                   IF        STUAGE = *ZERO OR STUSEX = *BLANKS  OR       
+0054.00 C                             STUNATION = *BLANKS                          
+0055.00 C                   EVAL      MSG1 = '修改失敗，修改資料有為空項目'      
+0056.00 C                   EVAL      MSG3 = *BLANKS                               
+0057.00 C                   ELSE                                                   
+0058.00 C                   EVAL      AGES = STUAGE                                
+0059.00 C                   EVAL      SEX = STUSEX                                 
+0060.00 C                   EVAL      NATION = STUNATION                           
+0061.00 C                   EVAL      MSG1 = '已成功修改學生信息'                
+0062.00 C*                  EVAL      MSG2 = *BLANKS                               
+0063.00 C                   EVAL      MSG3 = *BLANKS                               
+0064.00 C                   EVAL      STUID1 = *BLANKS                             
+0065.00 C                   EVAL      STUID = *BLANKS                              
+0066.00 C                   EVAL      STUNAME = *BLANKS                            
+0067.00 C                   EVAL      STUAGE = *ZERO                               
+0068.00 C                   EVAL      STUSEX = *BLANKS                             
+0069.00 C                   EVAL      STUNATION = *BLANKS                          
+0070.00 C                   UPDATE    STU                                          
+0071.00 C                   ENDIF                                                  
+0072.00 C                   ENDSR                                                  
+0073.00 C**************************************************************            
+0074.00 C     STUDEL        BEGSR                                                  
+0075.00 C     STUKEY2       KLIST                                                  
+0076.00 C                   KFLD                    ID                             
+0077.00 C                   EVAL      ID = STUID                                   
+0078.00 C     STUKEY2       CHAIN     STU                                          
+0079.00 C                   IF        %FOUND()  
+0080.00 C                   DELETE    STU                                        
+0081.00 C                   EVAL      STUID1 = STUID                             
+0082.00 C                   EVAL      MSG1 = '此學生信息已經成功刪除'          
+0083.00 C                   EVAL      STUID = *BLANKS                            
+0084.00 C                   EVAL      STUNAME = *BLANKS                          
+0085.00 C                   EVAL      STUAGE = *ZERO                             
+0086.00 C                   EVAL      STUSEX = *BLANKS                           
+0087.00 C                   EVAL      STUNATION = *BLANKS                        
+0088.00 C*                  EVAL      MSG2 = *BLANKS                             
+0089.00 C                   EVAL      MSG3 = *BLANKS                             
+0090.00 C                   ELSE                                                 
+0091.00 C                   EVAL      MSG1 = '沒有此學生信息，刪除失敗'        
+0092.00 C                   ENDIF                                                
+0093.00 C                   ENDSR                                                
+0094.00 C**************************************************************          
+0095.00 C     STUADD        BEGSR                                                
+0096.00 C                   IF        STUAGE = *ZERO OR STUSEX = *BLANKS  OR     
+0097.00 C                             STUNATION = *BLANKS  OR STUID = *BLANKS OR 
+0098.00 C                             STUNAME = *BLANKS                          
+0099.00 C                   EVAL      MSG1 = '添加失敗，添加的資料有空項'      
+0100.00 C                   EVAL      MSG3 = *BLANKS                               
+0101.00 C                   ELSE                                                   
+0102.00 C     STUKEY1       KLIST                                                  
+0103.00 C                   KFLD                    ID                             
+0104.00 C                   EVAL      ID = STUID1                                  
+0105.00 C     STUKEY1       CHAIN     STU                                          
+0106.00 C                   IF        %FOUND()                                     
+0107.00 C                   EVAL      MSG1 = '此學號已有學生信息'                
+0108.00 C                   ELSE                                                   
+0109.00 C                   EVAL      ID = STUID                                   
+0110.00 C                   EVAL      NAME = STUNAME                               
+0111.00 C                   EVAL      AGES = STUAGE                                
+0112.00 C                   EVAL      NATION = STUNATION                           
+0113.00 C                   EVAL      SEX= STUSEX                                  
+0114.00 C                   EVAL      STUID1 = STUID                               
+0115.00 C                   EVAL      MSG1 = '已經成功添加學生信息'              
+0116.00 C                   EVAL      STUID1 = *BLANKS                             
+0117.00 C*                  EVAL      MSG2 = *BLANKS                               
+0118.00 C                   WRITE     STU                                          
+0119.00 C                   EVAL      STUID = *BLANKS                              
+0120.00 C                   EVAL      STUNAME = *BLANKS                                 
+0121.00 C                   EVAL      STUAGE = *ZERO                                    
+0122.00 C                   EVAL      STUSEX = *BLANKS                                  
+0123.00 C                   EVAL      STUNATION = *BLANKS                               
+0124.00 C*                  EVAL      MSG2 = *BLANKS                                    
+0125.00 C                   EVAL      MSG3 = *BLANKS                                    
+0126.00 C                   ENDIF                                                       
+0127.00 C                   ENDIF                                                       
+0128.00 C                   ENDSR                                                       
+        ****************** End of data *************************************************                                   
